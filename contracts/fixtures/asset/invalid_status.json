@@ -1,0 +1,6 @@
+{
+  "id": "asset-test-bad-01",
+  "type": "ASSET_TYPE_DOMAIN",
+  "name": "seed-lab.example",
+  "status": "ASSET_STATUS_UNSPECIFIED"
+}

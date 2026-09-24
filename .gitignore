@@ -1,0 +1,27 @@
+# Build outputs
+core/target/
+collector/dist/
+collector/ui/dist/
+collector/ui/test-results/
+dist/
+
+# Dependencies
+collector/ui/node_modules/
+
+# Databases & runtime artifacts
+*.db
+*.db-journal
+*.sqlite*
+*.log
+
+# Secrets / local config
+.env
+*.pem
+*.key
+config.local.json
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

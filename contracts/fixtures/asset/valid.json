@@ -1,0 +1,9 @@
+{
+  "id": "asset-test-web-01",
+  "type": "ASSET_TYPE_HOST",
+  "name": "waf-sim lab host",
+  "identifiers": [
+    {"type": "ipv4", "value": "127.0.0.1"}
+  ],
+  "criticality": "SEVERITY_MEDIUM"
+}

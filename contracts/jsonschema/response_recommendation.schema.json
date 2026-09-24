@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://blueveil.local/contracts/v1/response_recommendation.schema.json",
+  "title": "ResponseRecommendation",
+  "description": "Canonical JSON form of blueveil.contracts.v1.ResponseRecommendation. A proposal only: creating one authorizes nothing. No SUCCESS/SECURE verdict exists anywhere in this contract family.",
+  "type": "object",
+  "required": ["id", "incident_id", "operation", "target", "risk", "reason", "status", "recommended_at", "recommended_by", "approval_required"],
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "incident_id": {"type": "string", "minLength": 1},
+    "operation": {"enum": ["OPERATION_TYPE_READ", "OPERATION_TYPE_OBSERVE", "OPERATION_TYPE_ANALYZE", "OPERATION_TYPE_RECOMMEND", "OPERATION_TYPE_WRITE", "OPERATION_TYPE_MODIFY", "OPERATION_TYPE_BLOCK", "OPERATION_TYPE_ISOLATE", "OPERATION_TYPE_DELETE", "OPERATION_TYPE_EXECUTE"]},
+    "target": {"type": "string", "minLength": 1},
+    "risk": {"enum": ["RISK_LEVEL_LOW", "RISK_LEVEL_MEDIUM", "RISK_LEVEL_HIGH", "RISK_LEVEL_CRITICAL"]},
+    "reason": {"type": "string", "minLength": 1},
+    "status": {"enum": ["RESPONSE_STATUS_PROPOSED", "RESPONSE_STATUS_PENDING_APPROVAL", "RESPONSE_STATUS_APPROVED", "RESPONSE_STATUS_DENIED", "RESPONSE_STATUS_EXECUTING", "RESPONSE_STATUS_EXECUTED", "RESPONSE_STATUS_EXECUTION_FAILED", "RESPONSE_STATUS_VERIFIED", "RESPONSE_STATUS_VERIFICATION_FAILED", "RESPONSE_STATUS_VERIFICATION_UNKNOWN"]},
+    "recommended_at": {"type": "string", "format": "date-time"},
+    "recommended_by": {"type": "string", "minLength": 1},
+    "approval_required": {"type": "boolean"}
+  },
+  "additionalProperties": false
+}

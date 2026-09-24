@@ -1,0 +1,67 @@
+// Asset and Identity contracts — blueveil.contracts.v1.
+// References between contracts use plain string IDs (asset_id, identity_id),
+// not nested messages, so each entity can evolve without cascading changes.
+syntax = "proto3";
+
+package blueveil.contracts.v1;
+
+import "blueveil/contracts/v1/common.proto";
+import "google/protobuf/timestamp.proto";
+
+enum AssetType {
+  ASSET_TYPE_UNSPECIFIED = 0;
+  ASSET_TYPE_HOST = 1;
+  ASSET_TYPE_CONTAINER = 2;
+  ASSET_TYPE_SERVICE = 3;
+  ASSET_TYPE_NETWORK = 4;
+  ASSET_TYPE_CLOUD_RESOURCE = 5;
+  ASSET_TYPE_USER_DEVICE = 6;
+  ASSET_TYPE_OTHER = 7;
+  // Step 13A additions (appended values only; existing numbers untouched).
+  ASSET_TYPE_DOMAIN = 8;
+  ASSET_TYPE_IP_ADDRESS = 9;
+  ASSET_TYPE_URL = 10;
+  ASSET_TYPE_APPLICATION = 11;
+}
+
+// Lifecycle status (Step 13A). Linear flow with documented revival:
+// DISCOVERED → ACTIVE → STALE → RETIRED, plus STALE → ACTIVE on
+// re-observation and ACTIVE → RETIRED for direct dismissal. RETIRED is
+// terminal. STALE means "unobserved lately", never "dead".
+enum AssetStatus {
+  ASSET_STATUS_UNSPECIFIED = 0;
+  ASSET_STATUS_DISCOVERED = 1;
+  ASSET_STATUS_ACTIVE = 2;
+  ASSET_STATUS_STALE = 3;
+  ASSET_STATUS_RETIRED = 4;
+}
+
+// One verifiable identifier for an asset, e.g. {type: "ipv4", value: "127.0.0.1"}.
+message AssetIdentifier {
+  string type = 1;
+  string value = 2;
+}
+
+message Asset {
+  // Stable Blueveil-side identifier, e.g. "asset-waf-sim-01".
+  string id = 1;
+  AssetType type = 2;
+  string name = 3;
+  repeated AssetIdentifier identifiers = 4;
+  // Business criticality of the asset (reuses the Severity scale).
+  // Optional: unknown criticality is expressed by omitting the field,
+  // never by sending SEVERITY_UNSPECIFIED.
+  Severity criticality = 5;
+  // Step 13A additions (all optional: pre-13A payloads stay valid).
+  // Deployment context, e.g. "lab", "staging", "prod". Empty = unknown.
+  string environment = 6;
+  // Lifecycle status. Absent = unknown (legacy records); never UNSPECIFIED
+  // when present.
+  AssetStatus status = 7;
+  // First observation; set at creation, never mutated afterwards.
+  google.protobuf.Timestamp first_seen = 8 [json_name = "first_seen"];
+  // Most recent observation; bumped on every re-observation.
+  google.protobuf.Timestamp last_seen = 9 [json_name = "last_seen"];
+  // Source-supplied facts (never inferred scores or verdicts).
+  map<string, string> attributes = 10;
+}

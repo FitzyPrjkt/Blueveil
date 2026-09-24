@@ -1,0 +1,28 @@
+// TelemetryEvent contract — blueveil.contracts.v1.
+// Canonical JSON uses snake_case field names (see explicit json_name options
+// and contracts/README.md). Timestamps are RFC 3339 (proto JSON mapping).
+syntax = "proto3";
+
+package blueveil.contracts.v1;
+
+import "blueveil/contracts/v1/common.proto";
+import "google/protobuf/timestamp.proto";
+
+message TelemetryEvent {
+  string id = 1;
+  google.protobuf.Timestamp occurred_at = 2 [json_name = "occurred_at"];
+  // Collector/source name, e.g. "waf-sim". Free string; the source registry
+  // arrives with a later contract, not here.
+  string source = 3;
+  // Reference to Asset.id.
+  string asset_id = 4 [json_name = "asset_id"];
+  // Optional reference to Identity.id.
+  string identity_id = 5 [json_name = "identity_id"];
+  // Source-namespaced event type, e.g. "waf.request_blocked".
+  string event_type = 6 [json_name = "event_type"];
+  Severity severity = 7;
+  map<string, string> attributes = 8;
+  // UTF-8 excerpt of the raw record. Binary payloads are out of scope for v1;
+  // producers needing binary must base64-encode and declare it in attributes.
+  string raw = 9;
+}

@@ -1,0 +1,7 @@
+{
+  "id": "evt-test-001",
+  "occurred_at": "2026-09-12T09:00:00Z",
+  "source": "waf-sim-lab",
+  "asset_id": "asset-test-web-01",
+  "event_type": "waf.request_blocked"
+}

@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://blueveil.local/contracts/v1/telemetry_event.schema.json",
+  "title": "TelemetryEvent",
+  "description": "Canonical JSON form of blueveil.contracts.v1.TelemetryEvent. Field names are snake_case (explicit json_name in proto). Timestamps are RFC 3339 date-time; validators MUST enforce format assertion.",
+  "type": "object",
+  "required": ["id", "occurred_at", "source", "asset_id", "event_type", "severity"],
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "occurred_at": {"type": "string", "format": "date-time"},
+    "source": {"type": "string", "minLength": 1},
+    "asset_id": {"type": "string", "minLength": 1},
+    "identity_id": {"type": "string", "minLength": 1},
+    "event_type": {"type": "string", "minLength": 1},
+    "severity": {"enum": ["SEVERITY_INFO", "SEVERITY_LOW", "SEVERITY_MEDIUM", "SEVERITY_HIGH", "SEVERITY_CRITICAL"]},
+    "attributes": {"type": "object", "additionalProperties": {"type": "string"}},
+    "raw": {"type": "string"}
+  },
+  "additionalProperties": false
+}

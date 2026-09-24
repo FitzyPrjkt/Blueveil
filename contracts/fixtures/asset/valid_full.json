@@ -1,0 +1,15 @@
+{
+  "id": "asset-test-app-01",
+  "type": "ASSET_TYPE_URL",
+  "name": "https://seed-lab.example/app",
+  "identifiers": [
+    {"type": "url", "value": "https://seed-lab.example/app"}
+  ],
+  "environment": "lab",
+  "status": "ASSET_STATUS_ACTIVE",
+  "first_seen": "2026-09-12T09:00:00Z",
+  "last_seen": "2026-09-12T10:00:00Z",
+  "attributes": {
+    "_fixture_note": "synthetic contract test data — not a real asset"
+  }
+}

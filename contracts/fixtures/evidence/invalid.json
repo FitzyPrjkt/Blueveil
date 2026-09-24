@@ -1,0 +1,10 @@
+{
+  "id": "ev-test-001",
+  "incident_id": "inc-test-001",
+  "type": "EVIDENCE_TYPE_LOG_EXCERPT",
+  "collected_at": "2026-09-12T09:04:00Z",
+  "source": "waf-sim-lab",
+  "media_type": "text/plain",
+  "sha256": "NOT-A-HASH",
+  "content": "synthetic contract test data — not a real security finding"
+}

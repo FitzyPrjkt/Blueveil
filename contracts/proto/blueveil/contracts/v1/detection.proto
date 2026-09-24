@@ -1,0 +1,64 @@
+// Detection → Alert → Incident contracts — blueveil.contracts.v1.
+// Detection is the output of one rule over telemetry. Alert is a triage
+// object over detections. Incident groups alerts for investigation.
+// Response/Remediation lifecycle is intentionally NOT modelled here:
+// it arrives as its own contract when the response engine is designed.
+syntax = "proto3";
+
+package blueveil.contracts.v1;
+
+import "blueveil/contracts/v1/common.proto";
+import "google/protobuf/timestamp.proto";
+
+message Detection {
+  string id = 1;
+  string rule_id = 2 [json_name = "rule_id"];
+  string rule_name = 3 [json_name = "rule_name"];
+  // At least one triggering TelemetryEvent.id. Non-empty by contract
+  // (enforced in JSON Schema; proto3 cannot express cardinality).
+  repeated string telemetry_event_ids = 4 [json_name = "telemetry_event_ids"];
+  google.protobuf.Timestamp detected_at = 5 [json_name = "detected_at"];
+  Severity severity = 6;
+  // Rule confidence in [0.0, 1.0]. Range enforced in JSON Schema.
+  double confidence = 7;
+  string title = 8;
+  string description = 9;
+  map<string, string> attributes = 10;
+}
+
+enum AlertStatus {
+  ALERT_STATUS_UNSPECIFIED = 0;
+  ALERT_STATUS_OPEN = 1;
+  ALERT_STATUS_ACKNOWLEDGED = 2;
+  ALERT_STATUS_CLOSED = 3;
+}
+
+message Alert {
+  string id = 1;
+  repeated string detection_ids = 2 [json_name = "detection_ids"];
+  AlertStatus status = 3;
+  Severity severity = 4;
+  google.protobuf.Timestamp created_at = 5 [json_name = "created_at"];
+  google.protobuf.Timestamp updated_at = 6 [json_name = "updated_at"];
+  string title = 7;
+}
+
+enum IncidentStatus {
+  INCIDENT_STATUS_UNSPECIFIED = 0;
+  INCIDENT_STATUS_OPEN = 1;
+  INCIDENT_STATUS_INVESTIGATING = 2;
+  INCIDENT_STATUS_CONTAINED = 3;
+  INCIDENT_STATUS_RESOLVED = 4;
+  INCIDENT_STATUS_CLOSED = 5;
+}
+
+message Incident {
+  string id = 1;
+  repeated string alert_ids = 2 [json_name = "alert_ids"];
+  IncidentStatus status = 3;
+  Severity severity = 4;
+  google.protobuf.Timestamp created_at = 5 [json_name = "created_at"];
+  google.protobuf.Timestamp updated_at = 6 [json_name = "updated_at"];
+  string title = 7;
+  string summary = 8;
+}

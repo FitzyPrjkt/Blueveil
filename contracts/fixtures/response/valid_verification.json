@@ -1,0 +1,7 @@
+{
+  "id": "verif-test-001",
+  "execution_id": "exec-test-001",
+  "outcome": "VERIFICATION_OUTCOME_UNKNOWN",
+  "verified_at": "2026-09-12T09:11:00Z",
+  "detail": "synthetic contract test data — no verification source attached; UNKNOWN, never verified"
+}

@@ -1,0 +1,70 @@
+{
+  "project": "Blueveil private control plane",
+  "step": "23-freeze",
+  "binary": {
+    "command": "blueveil --version",
+    "observed": "blueveil blueveil/collector (devel) go1.27.1",
+    "artifact": "dist/blueveil"
+  },
+  "ui": {
+    "artifact": "collector/ui/dist",
+    "suites": "vitest 73, playwright 20"
+  },
+  "contracts": {
+    "proto_hash_sha256_16": "8cc755b7f49943ed",
+    "proto_files": 8,
+    "fixtures": { "total": 29, "valid": 15, "invalid": 14 },
+    "schemas": 13,
+    "version": "v1"
+  },
+  "persistence": {
+    "schema_version": 5,
+    "backends": ["sqlite", "postgres"],
+    "migrations": "v1..v5 forward-only transactional; future/unknown refused; downgrade refused"
+  },
+  "toolchains": {
+    "go": "go1.27.1 linux/amd64",
+    "rustc": "1.98.1",
+    "cargo": "1.98.1",
+    "python": "3.13.5",
+    "node": "v26.7.0",
+    "npm": "11.19.0",
+    "postgresql": "17.11",
+    "protoc": "36.1"
+  },
+  "dependencies": {
+    "go_direct": [
+      "github.com/jackc/pgx/v5 v5.11.0",
+      "golang.org/x/crypto v0.57.0",
+      "google.golang.org/protobuf v1.36.12",
+      "modernc.org/sqlite v1.58.0"
+    ],
+    "ui_runtime": ["react ^19.1.0", "react-dom ^19.1.0"],
+    "rust": ["prost 0.14", "prost-types 0.14", "prost-build 0.14 (build)", "prost-reflect 0.16 (dev)", "serde_json 1 (dev)"],
+    "python": ["stdlib only"]
+  },
+  "verification": {
+    "go": "gofmt clean, vet clean, full test green, race green (28 packages), build ok",
+    "rust": "fmt/check/test-28/clippy clean",
+    "python": "21/21 + compile",
+    "ui": "typecheck, prettier, 73 vitest, production build, 20 playwright",
+    "runtime": "sqlite+postgres installs, TLS, auth matrix, backup/restore cycles, migration/refusal paths, restart/recovery, corruption, shutdown, LAN/VPN binds"
+  },
+  "known_limitations": [
+    "system-scope install not executed here (no root); user scope tested instead",
+    "second-peer LAN/VPN and public-internet behavior untested (forbidden/out of scope)",
+    "cross-version upgrade untestable from a single checkout (forward-only migration + refusal paths tested)",
+    "no brute-force lockout by design (uniform 401s + private network is the defense)",
+    "visual pixel review not performed (DOM/console assertions instead)"
+  ],
+  "explicitly_untested": [
+    "systemd system scope",
+    "peer-host networking",
+    "cross-version data upgrade",
+    "open-ended fuzzing (bounded corpus instead)"
+  ],
+  "explicitly_deferred": [
+    "HA/failover", "replication", "backup scheduling/off-host automation",
+    "Kubernetes/Docker", "OAuth/SSO/IAM", "external SIEM/TI", "public SaaS"
+  ]
+}

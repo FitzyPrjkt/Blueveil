@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://blueveil.local/contracts/v1/asset.schema.json",
+  "title": "Asset",
+  "description": "Canonical JSON form of blueveil.contracts.v1.Asset. Enum strings are proto value names; *_UNSPECIFIED is excluded so a defaulted enum fails validation. Step-13A fields (environment, status, first_seen, last_seen, attributes) are all optional: pre-13A payloads stay valid.",
+  "type": "object",
+  "required": ["id", "type", "name"],
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "type": {"enum": ["ASSET_TYPE_HOST", "ASSET_TYPE_CONTAINER", "ASSET_TYPE_SERVICE", "ASSET_TYPE_NETWORK", "ASSET_TYPE_CLOUD_RESOURCE", "ASSET_TYPE_USER_DEVICE", "ASSET_TYPE_OTHER", "ASSET_TYPE_DOMAIN", "ASSET_TYPE_IP_ADDRESS", "ASSET_TYPE_URL", "ASSET_TYPE_APPLICATION"]},
+    "name": {"type": "string", "minLength": 1},
+    "identifiers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["type", "value"],
+        "properties": {
+          "type": {"type": "string", "minLength": 1},
+          "value": {"type": "string", "minLength": 1}
+        },
+        "additionalProperties": false
+      }
+    },
+    "criticality": {"enum": ["SEVERITY_INFO", "SEVERITY_LOW", "SEVERITY_MEDIUM", "SEVERITY_HIGH", "SEVERITY_CRITICAL"]},
+    "environment": {"type": "string"},
+    "status": {"enum": ["ASSET_STATUS_DISCOVERED", "ASSET_STATUS_ACTIVE", "ASSET_STATUS_STALE", "ASSET_STATUS_RETIRED"]},
+    "first_seen": {"type": "string", "format": "date-time"},
+    "last_seen": {"type": "string", "format": "date-time"},
+    "attributes": {"type": "object", "additionalProperties": {"type": "string"}}
+  },
+  "additionalProperties": false
+}

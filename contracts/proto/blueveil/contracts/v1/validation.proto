@@ -1,0 +1,61 @@
+// Validation contracts — blueveil.contracts.v1.
+// Owned by Blueveil. A ValidationProvider (native validator, Redveil
+// adapter, future scanner, mock) receives a ValidationRequest and returns
+// a ValidationResult. The adapter translates provider-native output into
+// THIS contract; provider internals never leak into Blueveil.
+//
+// Deliberate absence: there is NO "SECURE" verdict. NOT_TESTED means no
+// validation was performed and MUST NOT be read as secure.
+syntax = "proto3";
+
+package blueveil.contracts.v1;
+
+import "google/protobuf/timestamp.proto";
+
+enum ValidationVerdict {
+  VALIDATION_VERDICT_UNSPECIFIED = 0;
+  // Attack blocked; no attacker-observable effect.
+  VALIDATION_VERDICT_PREVENTED = 1;
+  // Attack executed but detected and logged.
+  VALIDATION_VERDICT_DETECTED = 2;
+  // Blocked and detected.
+  VALIDATION_VERDICT_PREVENTED_AND_DETECTED = 3;
+  // Attack executed AND detected: prevention failed, detection worked.
+  VALIDATION_VERDICT_ALLOWED_BUT_DETECTED = 4;
+  // Attack executed and NOT detected: control gap.
+  VALIDATION_VERDICT_ALLOWED_AND_NOT_DETECTED = 5;
+  // Request throttled: neither clean prevention nor full allowance.
+  VALIDATION_VERDICT_RATE_LIMITED = 6;
+  // Validation ran but the outcome is indeterminate.
+  VALIDATION_VERDICT_UNKNOWN = 7;
+  // No validation performed. NOT secure. NOT a pass.
+  VALIDATION_VERDICT_NOT_TESTED = 8;
+}
+
+message ValidationRequest {
+  string id = 1;
+  // Control under test, e.g. "waf-xss-body-rule".
+  string control_id = 2 [json_name = "control_id"];
+  // Target of the validation, e.g. an asset id or URL.
+  string target = 3;
+  map<string, string> context = 4;
+  google.protobuf.Timestamp requested_at = 5 [json_name = "requested_at"];
+}
+
+message ValidationResult {
+  string id = 1;
+  // Owning ValidationRequest.id.
+  string request_id = 2 [json_name = "request_id"];
+  string control_id = 3 [json_name = "control_id"];
+  // Provider name, e.g. "native", "redveil", "mock". Free string; the
+  // provider registry arrives with a later contract, not here.
+  string provider = 4;
+  string provider_version = 5 [json_name = "provider_version"];
+  // Contract version this result speaks, e.g. "blueveil.contracts.v1".
+  string contract_version = 6 [json_name = "contract_version"];
+  ValidationVerdict verdict = 7;
+  google.protobuf.Timestamp validated_at = 8 [json_name = "validated_at"];
+  // References to Evidence.id supporting the verdict.
+  repeated string evidence_ids = 9 [json_name = "evidence_ids"];
+  string note = 10;
+}

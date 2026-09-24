@@ -1,0 +1,12 @@
+{
+  "id": "vres-test-001",
+  "request_id": "vreq-test-001",
+  "control_id": "waf-xss-body-rule",
+  "provider": "mock",
+  "provider_version": "0.0.0-test",
+  "contract_version": "blueveil.contracts.v1",
+  "verdict": "VALIDATION_VERDICT_ALLOWED_BUT_DETECTED",
+  "validated_at": "2026-09-12T09:07:00Z",
+  "evidence_ids": ["ev-test-001"],
+  "note": "synthetic contract test data — not a real security finding"
+}

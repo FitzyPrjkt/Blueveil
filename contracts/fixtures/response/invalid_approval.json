@@ -1,0 +1,11 @@
+{
+  "id": "appr-test-001",
+  "recommendation_id": "rec-test-001",
+  "operation": "OPERATION_TYPE_RECOMMEND",
+  "target": "asset-test-web-01",
+  "risk": "RISK_LEVEL_HIGH",
+  "approver": "test-actor:analyst-fixture",
+  "approved_at": "2026-09-12T09:09:00Z",
+  "expires_at": "not-a-timestamp",
+  "reason": "synthetic contract test data"
+}

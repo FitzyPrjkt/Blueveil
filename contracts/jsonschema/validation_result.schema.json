@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://blueveil.local/contracts/v1/validation_result.schema.json",
+  "title": "ValidationResult",
+  "description": "Canonical JSON form of blueveil.contracts.v1.ValidationResult. There is deliberately NO secure/pass verdict: NOT_TESTED means no validation was performed and MUST NOT be read as secure. contract_version pins the contract the provider speaks.",
+  "type": "object",
+  "required": ["id", "request_id", "control_id", "provider", "contract_version", "verdict", "validated_at"],
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "request_id": {"type": "string", "minLength": 1},
+    "control_id": {"type": "string", "minLength": 1},
+    "provider": {"type": "string", "minLength": 1},
+    "provider_version": {"type": "string"},
+    "contract_version": {"type": "string", "pattern": "^blueveil\\.contracts\\.v[0-9]+$"},
+    "verdict": {"enum": ["VALIDATION_VERDICT_PREVENTED", "VALIDATION_VERDICT_DETECTED", "VALIDATION_VERDICT_PREVENTED_AND_DETECTED", "VALIDATION_VERDICT_ALLOWED_BUT_DETECTED", "VALIDATION_VERDICT_ALLOWED_AND_NOT_DETECTED", "VALIDATION_VERDICT_RATE_LIMITED", "VALIDATION_VERDICT_UNKNOWN", "VALIDATION_VERDICT_NOT_TESTED"]},
+    "validated_at": {"type": "string", "format": "date-time"},
+    "evidence_ids": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "note": {"type": "string"}
+  },
+  "additionalProperties": false
+}

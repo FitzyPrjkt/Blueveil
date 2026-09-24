@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://blueveil.local/contracts/v1/response_verification.schema.json",
+  "title": "ResponseVerification",
+  "description": "Canonical JSON form of blueveil.contracts.v1.ResponseVerification. UNKNOWN means no verification source — never read it as verified.",
+  "type": "object",
+  "required": ["id", "execution_id", "outcome", "verified_at", "detail"],
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "execution_id": {"type": "string", "minLength": 1},
+    "outcome": {"enum": ["VERIFICATION_OUTCOME_VERIFIED", "VERIFICATION_OUTCOME_FAILED", "VERIFICATION_OUTCOME_UNKNOWN"]},
+    "verified_at": {"type": "string", "format": "date-time"},
+    "detail": {"type": "string", "minLength": 1}
+  },
+  "additionalProperties": false
+}

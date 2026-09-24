@@ -1,0 +1,10 @@
+{
+  "id": "vres-test-002",
+  "request_id": "vreq-test-001",
+  "control_id": "unvalidated-control",
+  "provider": "mock",
+  "contract_version": "blueveil.contracts.v1",
+  "verdict": "VALIDATION_VERDICT_NOT_TESTED",
+  "validated_at": "2026-09-12T09:07:00Z",
+  "note": "no validation performed — this MUST NOT be read as secure; there is deliberately no SECURE verdict in this contract"
+}

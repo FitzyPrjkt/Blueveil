@@ -1,0 +1,83 @@
+# Blueveil private service (system scope).
+#
+# Install: deploy/install.sh --system   (or see docs/OPERATOR.md).
+# Paths are baked in by deploy/install.sh (@TOKENS@ below): systemd
+# verification cannot resolve EnvironmentFile variables in ExecStart, so
+# absolute paths keep `systemd-analyze verify` honest. No secret VALUES
+# live here (see secrets file).
+#
+# Layering this unit relies on (and nothing else):
+#   HTTP → AuthN → AuthZ → API → Safety Policy → Approval → Execution.
+# The service adds no new behavior over `blueveil --serve --config`.
+
+[Unit]
+Description=Blueveil private security control plane
+Documentation=file:///usr/local/share/doc/blueveil/OPERATOR.md
+# Order after local PostgreSQL when it exists; never require it, so an
+# externally managed database keeps working (After without Requires).
+After=network-online.target postgresql.service
+Wants=network-online.target postgresql.service
+# Crash-loop bound: 3 restarts per 5 minutes, then stay failed for the
+# operator (a crash loop is a signal, not a state to persist).
+StartLimitIntervalSec=300
+StartLimitBurst=3
+
+[Service]
+Type=simple
+# Dedicated identity: Blueveil never needs root (binds high ports by
+# default; sqlite files and sockets are user-owned). User installs run
+# the same unit under the installing user instead.
+User=blueveil
+Group=blueveil
+WorkingDirectory=@DATADIR@
+# Secrets (0600, service-user-readable only): BLUEVEIL_PG_PASSWORD,
+# BLUEVEIL_API_KEYS. The dash prefix keeps startup working when the
+# file is absent (e.g. SQLite without password, keys in config.json).
+# NOTE: `systemctl show` prints Environment= lines but NOT the contents
+# of EnvironmentFile, so secrets stay out of introspection output.
+EnvironmentFile=-@CONFDIR@/secrets.env
+ExecStart=@BINDIR@/blueveil --serve --config @CONFDIR@/config.json
+# Restart unexpected crashes, never deterministic config failures
+# (exit 2 = usage/config error; restarting those loops forever).
+Restart=on-failure
+RestartPreventExitStatus=2
+RestartSec=5
+# Graceful SIGTERM handling: the server drains in-flight requests
+# bounded by limits.shutdown_timeout, then closes persistence.
+# TimeoutStopSec must exceed that bound or systemd kills mid-drain.
+TimeoutStopSec=30
+KillSignal=SIGTERM
+# --- Filesystem. Blueveil's only mutable state is its database
+# (WorkingDirectory) plus PrivateTmp. Everything else is read-only.
+UMask=0027
+ProtectSystem=strict
+ReadWritePaths=@DATADIR@
+ProtectHome=true
+PrivateTmp=true
+PrivateDevices=true
+# --- Kernel attack surface the service never needs.
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+ProtectClock=true
+ProtectHostname=true
+RestrictSUIDSGID=true
+RestrictRealtime=true
+LockPersonality=true
+SystemCallArchitectures=native
+# RestrictNamespaces is deliberately absent: PrivateTmp needs a mount
+# namespace, and combining the two is fragile across systemd versions.
+# --- Privileges: none. The binary needs no capabilities (no low ports,
+# no raw sockets, no tracing).
+NoNewPrivileges=true
+CapabilityBoundingSet=
+# MemoryDenyWriteExecute is deliberately absent: the Go runtime and its
+# pure-Go dependencies are not certified against WX denial, and the
+# above set already removes the privilege paths it would guard.
+# --- Logging goes to the journal (no log files to rotate or leak):
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=blueveil
+
+[Install]
+WantedBy=multi-user.target

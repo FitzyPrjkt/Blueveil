@@ -1,0 +1,5 @@
+{
+  "id": "ident-test-collector-01",
+  "type": "IDENTITY_TYPE_SERVICE_ACCOUNT",
+  "name": "waf-sim collector"
+}

@@ -1,0 +1,139 @@
+// Response contracts — blueveil.contracts.v1 (additive, Step 8).
+// Owned by Blueveil. These messages give the safety-governed response layer
+// a language-neutral representation: recommendation, human/policy approval,
+// execution record, verification outcome. Audit stays code-level (Rust
+// audit.rs + Go audit log with identical field semantics) until a dedicated
+// audit contract is justified — not speculatively here.
+//
+// Deliberately absent: SUCCESS, SECURE, PASSED. Outcomes stay explicit
+// (EXECUTED vs VERIFIED vs UNKNOWN are different claims).
+syntax = "proto3";
+
+package blueveil.contracts.v1;
+
+import "google/protobuf/timestamp.proto";
+
+// Operation type, deliberately independent from RiskLevel. Mirrors the
+// approved Blueveil operation taxonomy (and Rust core policy::Operation).
+enum OperationType {
+  OPERATION_TYPE_UNSPECIFIED = 0;
+  OPERATION_TYPE_READ = 1;
+  OPERATION_TYPE_OBSERVE = 2;
+  OPERATION_TYPE_ANALYZE = 3;
+  OPERATION_TYPE_RECOMMEND = 4;
+  OPERATION_TYPE_WRITE = 5;
+  OPERATION_TYPE_MODIFY = 6;
+  OPERATION_TYPE_BLOCK = 7;
+  OPERATION_TYPE_ISOLATE = 8;
+  OPERATION_TYPE_DELETE = 9;
+  OPERATION_TYPE_EXECUTE = 10;
+}
+
+// Risk/impact level, independent from OperationType. A HIGH operation never
+// implies BLOCK; policy always decides.
+enum RiskLevel {
+  RISK_LEVEL_UNSPECIFIED = 0;
+  RISK_LEVEL_LOW = 1;
+  RISK_LEVEL_MEDIUM = 2;
+  RISK_LEVEL_HIGH = 3;
+  RISK_LEVEL_CRITICAL = 4;
+}
+
+// Lifecycle status tracked on a ResponseRecommendation. Terminal states:
+// DENIED, EXECUTION_FAILED (after failed verification), VERIFIED,
+// VERIFICATION_FAILED, VERIFICATION_UNKNOWN.
+enum ResponseStatus {
+  RESPONSE_STATUS_UNSPECIFIED = 0;
+  // Recommendation recorded, undecided.
+  RESPONSE_STATUS_PROPOSED = 1;
+  // Policy requires human approval before execution.
+  RESPONSE_STATUS_PENDING_APPROVAL = 2;
+  // Authorized (by policy directly, or by a recorded approval).
+  RESPONSE_STATUS_APPROVED = 3;
+  // Policy refused. Terminal.
+  RESPONSE_STATUS_DENIED = 4;
+  // Handed to the executor (transient; never a final claim).
+  RESPONSE_STATUS_EXECUTING = 5;
+  // Executor reported success. NOT "secured" — verification still pending.
+  RESPONSE_STATUS_EXECUTED = 6;
+  // Executor reported failure.
+  RESPONSE_STATUS_EXECUTION_FAILED = 7;
+  // Verification confirmed the response intent.
+  RESPONSE_STATUS_VERIFIED = 8;
+  // Verification disproved the response intent.
+  RESPONSE_STATUS_VERIFICATION_FAILED = 9;
+  // No verification source: unknown, never verified.
+  RESPONSE_STATUS_VERIFICATION_UNKNOWN = 10;
+}
+
+// Verification outcome, separate from execution outcome by design:
+// a successful execution is not a verified response.
+enum VerificationOutcome {
+  VERIFICATION_OUTCOME_UNSPECIFIED = 0;
+  VERIFICATION_OUTCOME_VERIFIED = 1;
+  VERIFICATION_OUTCOME_FAILED = 2;
+  VERIFICATION_OUTCOME_UNKNOWN = 3;
+}
+
+// A proposed response to an incident. Data, not authorization: creating one
+// permits nothing.
+message ResponseRecommendation {
+  string id = 1;
+  // Owning Incident.id.
+  string incident_id = 2 [json_name = "incident_id"];
+  OperationType operation = 3;
+  // What the operation would observe/affect (asset ids, joined when many).
+  string target = 4;
+  RiskLevel risk = 5;
+  // Why this is proposed, citing incident data only — never attacker intent.
+  string reason = 6;
+  ResponseStatus status = 7;
+  google.protobuf.Timestamp recommended_at = 8 [json_name = "recommended_at"];
+  // Component identity that proposed this (e.g. "blueveil-recommender/1"),
+  // never a fabricated human.
+  string recommended_by = 9 [json_name = "recommended_by"];
+  // Advisory flag mirroring the safety gate rule; policy re-evaluates
+  // independently and never trusts this flag.
+  bool approval_required = 10 [json_name = "approval_required"];
+}
+
+// A human approval bound to exactly one recommendation. Binding fields
+// (recommendation_id, operation, target, risk) must all match at use;
+// an approval for BLOCK target-A never authorizes DELETE target-B.
+message ResponseApproval {
+  string id = 1;
+  string recommendation_id = 2 [json_name = "recommendation_id"];
+  OperationType operation = 3;
+  string target = 4;
+  RiskLevel risk = 5;
+  // Explicit actor identity (synthetic test actors must be labeled as such).
+  string approver = 6;
+  google.protobuf.Timestamp approved_at = 7 [json_name = "approved_at"];
+  // Optional expiry; absent means no expiry. Expired approvals reject.
+  google.protobuf.Timestamp expires_at = 8 [json_name = "expires_at"];
+  string reason = 9;
+}
+
+// The executor's report. success = "the executor did what was asked".
+// It is NOT "the system is secured" — only verification can speak to that.
+message ResponseExecution {
+  string id = 1;
+  string recommendation_id = 2 [json_name = "recommendation_id"];
+  // Empty when policy authorized without human approval.
+  string approval_id = 3 [json_name = "approval_id"];
+  OperationType operation = 4;
+  string target = 5;
+  google.protobuf.Timestamp started_at = 6 [json_name = "started_at"];
+  google.protobuf.Timestamp finished_at = 7 [json_name = "finished_at"];
+  bool success = 8;
+  string detail = 9;
+}
+
+// The verification verdict over one execution.
+message ResponseVerification {
+  string id = 1;
+  string execution_id = 2 [json_name = "execution_id"];
+  VerificationOutcome outcome = 3;
+  google.protobuf.Timestamp verified_at = 4 [json_name = "verified_at"];
+  string detail = 5;
+}

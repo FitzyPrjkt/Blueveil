@@ -1,0 +1,12 @@
+{
+  "id": "rec-test-001",
+  "incident_id": "inc-test-001",
+  "operation": "OPERATION_TYPE_RECOMMEND",
+  "target": "asset-test-web-01",
+  "risk": "RISK_LEVEL_HIGH",
+  "reason": "synthetic contract test data — incident inc-test-001 (severity HIGH) requires analyst review; no automated action proposed",
+  "status": "RESPONSE_STATUS_PROPOSED",
+  "recommended_at": "2026-09-12T09:08:00Z",
+  "recommended_by": "blueveil-recommender/1-test",
+  "approval_required": true
+}

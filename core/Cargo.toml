@@ -1,0 +1,21 @@
+[package]
+name = "blueveil-core"
+version = "0.1.0"
+edition = "2021"
+description = "Blueveil core control-plane skeleton: contract-first domain boundary, in-process events, extension registry, policy/safety/audit skeleton. No I/O, no network, no database."
+publish = false
+
+[dependencies]
+# Runtime contract representation: types generated from ../contracts/proto.
+prost = "0.14"
+prost-types = "0.14"
+
+[build-dependencies]
+# Build-time only: runs protoc codegen. Never shipped in the library.
+prost-build = "0.14"
+
+[dev-dependencies]
+# Test-only: parses Step-2 JSON fixtures through the compiled descriptor
+# (proto JSON mapping) to prove the contract boundary. Not a runtime dep.
+prost-reflect = { version = "0.16", features = ["serde"] }
+serde_json = "1"

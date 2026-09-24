@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://blueveil.local/contracts/v1/response_execution.schema.json",
+  "title": "ResponseExecution",
+  "description": "Canonical JSON form of blueveil.contracts.v1.ResponseExecution. success means the executor did what was asked — it is NOT 'secured'. approval_id is empty when policy authorized without human approval.",
+  "type": "object",
+  "required": ["id", "recommendation_id", "operation", "target", "started_at", "finished_at", "success", "detail"],
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "recommendation_id": {"type": "string", "minLength": 1},
+    "approval_id": {"type": "string"},
+    "operation": {"enum": ["OPERATION_TYPE_READ", "OPERATION_TYPE_OBSERVE", "OPERATION_TYPE_ANALYZE", "OPERATION_TYPE_RECOMMEND", "OPERATION_TYPE_WRITE", "OPERATION_TYPE_MODIFY", "OPERATION_TYPE_BLOCK", "OPERATION_TYPE_ISOLATE", "OPERATION_TYPE_DELETE", "OPERATION_TYPE_EXECUTE"]},
+    "target": {"type": "string", "minLength": 1},
+    "started_at": {"type": "string", "format": "date-time"},
+    "finished_at": {"type": "string", "format": "date-time"},
+    "success": {"type": "boolean"},
+    "detail": {"type": "string", "minLength": 1}
+  },
+  "additionalProperties": false
+}

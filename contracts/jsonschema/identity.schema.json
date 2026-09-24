@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://blueveil.local/contracts/v1/identity.schema.json",
+  "title": "Identity",
+  "description": "Canonical JSON form of blueveil.contracts.v1.Identity.",
+  "type": "object",
+  "required": ["id", "type", "name"],
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "type": {"enum": ["IDENTITY_TYPE_USER", "IDENTITY_TYPE_SERVICE_ACCOUNT", "IDENTITY_TYPE_WORKLOAD", "IDENTITY_TYPE_ANONYMOUS"]},
+    "name": {"type": "string", "minLength": 1}
+  },
+  "additionalProperties": false
+}

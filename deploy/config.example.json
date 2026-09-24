@@ -1,0 +1,46 @@
+{
+  "env": "production",
+  "listen_addr": "127.0.0.1:8008",
+  "database": {
+    "backend": "sqlite",
+    "sqlite_path": "/var/lib/blueveil/blueveil.db",
+    "postgres": {
+      "host": "127.0.0.1",
+      "port": 5432,
+      "user": "blueveil",
+      "password": "",
+      "dbname": "blueveil",
+      "sslmode": "require",
+      "max_conns": 8,
+      "connect_timeout": "10s",
+      "query_timeout": "30s"
+    }
+  },
+  "tls": {
+    "enabled": false,
+    "cert_file": "/etc/blueveil/tls/cert.pem",
+    "key_file": "/etc/blueveil/tls/tls.key",
+    "min_version": "1.3",
+    "explicit_insecure_http": false
+  },
+  "auth": {
+    "enabled": true,
+    "keys": [
+      {
+        "id": "REPLACE-WITH-KEY-ID",
+        "role": "ADMIN",
+        "hash": "REPLACE-WITH-BCRYPT-HASH (collector --keygen --key-id ID --key-role ADMIN)",
+        "expires_at": ""
+      }
+    ],
+    "public_paths": []
+  },
+  "logging": { "level": "info", "format": "json" },
+  "limits": {
+    "request_body_bytes": 1048576,
+    "read_header_timeout": "5s",
+    "shutdown_timeout": "10s"
+  },
+  "ui_dir": "/usr/local/share/blueveil/ui",
+  "ioc_set": { "path": "", "id": "", "version": "" }
+}

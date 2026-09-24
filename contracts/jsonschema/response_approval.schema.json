@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://blueveil.local/contracts/v1/response_approval.schema.json",
+  "title": "ResponseApproval",
+  "description": "Canonical JSON form of blueveil.contracts.v1.ResponseApproval. Bound to exactly one recommendation (id + operation + target + risk must all match at use). expires_at is optional: absent means no expiry.",
+  "type": "object",
+  "required": ["id", "recommendation_id", "operation", "target", "risk", "approver", "approved_at", "reason"],
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "recommendation_id": {"type": "string", "minLength": 1},
+    "operation": {"enum": ["OPERATION_TYPE_READ", "OPERATION_TYPE_OBSERVE", "OPERATION_TYPE_ANALYZE", "OPERATION_TYPE_RECOMMEND", "OPERATION_TYPE_WRITE", "OPERATION_TYPE_MODIFY", "OPERATION_TYPE_BLOCK", "OPERATION_TYPE_ISOLATE", "OPERATION_TYPE_DELETE", "OPERATION_TYPE_EXECUTE"]},
+    "target": {"type": "string", "minLength": 1},
+    "risk": {"enum": ["RISK_LEVEL_LOW", "RISK_LEVEL_MEDIUM", "RISK_LEVEL_HIGH", "RISK_LEVEL_CRITICAL"]},
+    "approver": {"type": "string", "minLength": 1},
+    "approved_at": {"type": "string", "format": "date-time"},
+    "expires_at": {"type": "string", "format": "date-time"},
+    "reason": {"type": "string", "minLength": 1}
+  },
+  "additionalProperties": false
+}

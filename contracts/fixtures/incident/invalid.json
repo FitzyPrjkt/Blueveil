@@ -1,0 +1,9 @@
+{
+  "id": "inc-test-001",
+  "alert_ids": ["alert-test-001"],
+  "status": "INCIDENT_STATUS_INVESTIGATING",
+  "severity": "SEVERITY_HIGH",
+  "created_at": "not-a-timestamp",
+  "updated_at": "2026-09-12T09:05:00Z",
+  "title": "Synthetic WAF incident"
+}

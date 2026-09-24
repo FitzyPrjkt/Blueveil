@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://blueveil.local/contracts/v1/validation_request.schema.json",
+  "title": "ValidationRequest",
+  "description": "Canonical JSON form of blueveil.contracts.v1.ValidationRequest. Input to a ValidationProvider.",
+  "type": "object",
+  "required": ["id", "control_id", "target", "requested_at"],
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "control_id": {"type": "string", "minLength": 1},
+    "target": {"type": "string", "minLength": 1},
+    "context": {"type": "object", "additionalProperties": {"type": "string"}},
+    "requested_at": {"type": "string", "format": "date-time"}
+  },
+  "additionalProperties": false
+}

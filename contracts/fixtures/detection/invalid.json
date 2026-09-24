@@ -1,0 +1,10 @@
+{
+  "id": "det-test-001",
+  "rule_id": "rule-waf-block-burst",
+  "rule_name": "WAF block burst",
+  "telemetry_event_ids": [],
+  "detected_at": "2026-09-12T09:01:00Z",
+  "severity": "SEVERITY_HIGH",
+  "confidence": 0.9,
+  "title": "Synthetic burst of WAF blocks"
+}

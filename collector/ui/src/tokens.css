@@ -1,0 +1,239 @@
+/* Blueveil visual tokens. Two themes, one scale. Steel blue primary in
+   light, soft blue on navy-ink in dark. Severity colors are semantic and
+   identical across themes. No gradients, no glass, no neon. */
+
+:root,
+[data-theme="light"] {
+  --bv-bg: #f7f9fc;
+  --bv-surface: #ffffff;
+  --bv-card: #ffffff;
+  --bv-border: #e3e9f2;
+  --bv-border-strong: #cbd5e3;
+  --bv-ink: #16233a;
+  --bv-ink-soft: #3d4f6d;
+  --bv-muted: #68799a;
+  --bv-faint: #eef2f8;
+  --bv-primary: #2463c9;
+  --bv-primary-ink: #ffffff;
+  --bv-primary-soft: #e8effc;
+  --bv-focus: #2463c9;
+  --bv-shadow: 0 1px 2px rgb(22 35 58 / 0.06), 0 1px 3px rgb(22 35 58 / 0.08);
+  --bv-radius-s: 6px;
+  --bv-radius-m: 8px;
+  --bv-radius-l: 12px;
+  --bv-sev-critical: #dc2626;
+  --bv-sev-critical-bg: #fdecec;
+  --bv-sev-high: #c2570b;
+  --bv-sev-high-bg: #fdf1e3;
+  --bv-sev-medium: #1d6fd1;
+  --bv-sev-medium-bg: #e8f0fd;
+  --bv-sev-low: #15803d;
+  --bv-sev-low-bg: #e7f5ec;
+  --bv-sev-info: #5b6b87;
+  --bv-sev-info-bg: #eef1f6;
+  --bv-ok: #15803d;
+  --bv-bad: #dc2626;
+  --bv-warn: #c2570b;
+  --bv-skeleton: #e6ebf3;
+  --bv-overlay: rgb(22 35 58 / 0.4);
+}
+
+[data-theme="dark"] {
+  --bv-bg: #0a1424;
+  --bv-surface: #0f1c33;
+  --bv-card: #10203a;
+  --bv-border: #1e3252;
+  --bv-border-strong: #2c4470;
+  --bv-ink: #e8eef8;
+  --bv-ink-soft: #b9c6dd;
+  --bv-muted: #8494b3;
+  --bv-faint: #14263f;
+  --bv-primary: #6ea3f2;
+  --bv-primary-ink: #081226;
+  --bv-primary-soft: #16294d;
+  --bv-focus: #6ea3f2;
+  --bv-shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 1px 3px rgb(0 0 0 / 0.35);
+  --bv-sev-critical: #f27676;
+  --bv-sev-critical-bg: #3a1620;
+  --bv-sev-high: #f0a35c;
+  --bv-sev-high-bg: #3a2513;
+  --bv-sev-medium: #7db4f5;
+  --bv-sev-medium-bg: #14294d;
+  --bv-sev-low: #63c98c;
+  --bv-sev-low-bg: #123324;
+  --bv-sev-info: #93a1bb;
+  --bv-sev-info-bg: #1a2740;
+  --bv-ok: #63c98c;
+  --bv-bad: #f27676;
+  --bv-warn: #f0a35c;
+  --bv-skeleton: #1a2c4b;
+  --bv-overlay: rgb(2 6 16 / 0.6);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bv-bg);
+  color: var(--bv-ink);
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  transition:
+    background-color 180ms ease,
+    color 180ms ease;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12.5px;
+}
+
+/* Focus visibility everywhere interactive (L micro-interaction). */
+:focus-visible {
+  outline: 2px solid var(--bv-focus);
+  outline-offset: 2px;
+  border-radius: var(--bv-radius-s);
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease,
+    border-color 150ms ease;
+}
+
+/* Skeleton shimmer (F). Single keyframe, respects reduced motion. */
+@keyframes bv-shimmer {
+  from {
+    opacity: 0.55;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.skeleton {
+  background: var(--bv-skeleton);
+  border-radius: var(--bv-radius-s);
+  animation: bv-shimmer 1.1s ease-in-out infinite alternate;
+}
+
+/* Row mount fade (L). Subtle: 4px rise, 150ms. */
+@keyframes bv-rise {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.rise {
+  animation: bv-rise 150ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+  }
+  .rise {
+    animation: none;
+  }
+  body {
+    transition: none;
+  }
+  button {
+    transition: none;
+  }
+  * {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* kbd hint (freebie). */
+.kbd {
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  padding: 0 6px;
+  font-family: ui-monospace, monospace;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--bv-muted);
+  background: var(--bv-faint);
+  border: 1px solid var(--bv-border);
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ---- Type + spacing scale (executive layer + workspace polish) ---- */
+:root,
+[data-theme="light"],
+[data-theme="dark"] {
+  --bv-space-1: 4px;
+  --bv-space-2: 8px;
+  --bv-space-3: 16px;
+  --bv-space-4: 24px;
+  --bv-space-5: 32px;
+  --bv-space-6: 48px;
+}
+
+.display {
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.body {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.caption {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--bv-muted);
+}

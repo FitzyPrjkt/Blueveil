@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://blueveil.local/contracts/v1/evidence.schema.json",
+  "title": "Evidence",
+  "description": "Canonical JSON form of blueveil.contracts.v1.Evidence. sha256, when present, MUST be lowercase hex (64 chars); validators MUST enforce the pattern.",
+  "type": "object",
+  "required": ["id", "incident_id", "type", "collected_at", "source", "media_type", "content"],
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "incident_id": {"type": "string", "minLength": 1},
+    "type": {"enum": ["EVIDENCE_TYPE_LOG_EXCERPT", "EVIDENCE_TYPE_HTTP_REQUEST", "EVIDENCE_TYPE_HTTP_RESPONSE", "EVIDENCE_TYPE_SCAN_RESULT", "EVIDENCE_TYPE_FILE_HASH", "EVIDENCE_TYPE_NOTE"]},
+    "collected_at": {"type": "string", "format": "date-time"},
+    "source": {"type": "string", "minLength": 1},
+    "media_type": {"type": "string", "minLength": 1},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "content": {"type": "string", "minLength": 1}
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,15 @@
+{
+  "id": "evt-test-001",
+  "occurred_at": "2026-09-12T09:00:00Z",
+  "source": "waf-sim-lab",
+  "asset_id": "asset-test-web-01",
+  "identity_id": "ident-test-collector-01",
+  "event_type": "waf.request_blocked",
+  "severity": "SEVERITY_HIGH",
+  "attributes": {
+    "_fixture_note": "synthetic contract test data — not a real security finding",
+    "rule_id": "CRS-941100",
+    "client_ip": "127.0.0.1"
+  },
+  "raw": "POST /search <script>alert(1)</script> -> 403"
+}

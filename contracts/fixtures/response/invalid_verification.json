@@ -1,0 +1,7 @@
+{
+  "id": "verif-test-001",
+  "execution_id": "exec-test-001",
+  "outcome": "VERIFICATION_OUTCOME_VERIFIED",
+  "verified_at": "not-a-timestamp",
+  "detail": "synthetic contract test data"
+}

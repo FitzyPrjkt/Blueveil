@@ -1,0 +1,35 @@
+// Evidence contract — blueveil.contracts.v1.
+// Evidence is always attached to an incident and is content-addressed
+// when a hash is available (sha256 optional, lowercase hex when present).
+syntax = "proto3";
+
+package blueveil.contracts.v1;
+
+import "google/protobuf/timestamp.proto";
+
+enum EvidenceType {
+  EVIDENCE_TYPE_UNSPECIFIED = 0;
+  EVIDENCE_TYPE_LOG_EXCERPT = 1;
+  EVIDENCE_TYPE_HTTP_REQUEST = 2;
+  EVIDENCE_TYPE_HTTP_RESPONSE = 3;
+  EVIDENCE_TYPE_SCAN_RESULT = 4;
+  EVIDENCE_TYPE_FILE_HASH = 5;
+  EVIDENCE_TYPE_NOTE = 6;
+}
+
+message Evidence {
+  string id = 1;
+  // Owning Incident.id.
+  string incident_id = 2 [json_name = "incident_id"];
+  EvidenceType type = 3;
+  google.protobuf.Timestamp collected_at = 4 [json_name = "collected_at"];
+  // Where the evidence came from, e.g. "waf-sim", "analyst-note".
+  string source = 5;
+  // MIME type of content, e.g. "application/json", "text/plain".
+  string media_type = 6 [json_name = "media_type"];
+  // Lowercase hex SHA-256 of content when available; empty otherwise.
+  string sha256 = 7;
+  // Inline content. Large blobs are out of scope for v1 (a content
+  // reference contract arrives with object storage support, not here).
+  string content = 8;
+}

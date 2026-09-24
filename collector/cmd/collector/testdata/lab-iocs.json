@@ -1,0 +1,5 @@
+[
+  {"kind":"ip","value":"203.0.113.7","source":"lab-ioc-v1"},
+  {"kind":"domain","value":"Test-IOC-Sink.EXAMPLE.","source":"lab-ioc-v1"},
+  {"kind":"sha256","value":"0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef","source":"lab-ioc-v1"}
+]

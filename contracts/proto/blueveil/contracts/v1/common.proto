@@ -1,0 +1,21 @@
+// Blueveil contract layer — canonical definitions.
+// Package: blueveil.contracts.v1
+// See contracts/README.md for versioning, JSON mapping and design decisions.
+// These contracts are owned by Blueveil. No Redveil model, schema or
+// implementation detail is imported, copied or referenced here.
+syntax = "proto3";
+
+package blueveil.contracts.v1;
+
+// Severity scale shared by telemetry, detections, alerts and incidents.
+// The zero value is intentionally invalid: producers must set an explicit
+// severity. JSON Schemas exclude SEVERITY_UNSPECIFIED from their enums,
+// so a missing or defaulted severity fails runtime validation.
+enum Severity {
+  SEVERITY_UNSPECIFIED = 0;
+  SEVERITY_INFO = 1;
+  SEVERITY_LOW = 2;
+  SEVERITY_MEDIUM = 3;
+  SEVERITY_HIGH = 4;
+  SEVERITY_CRITICAL = 5;
+}

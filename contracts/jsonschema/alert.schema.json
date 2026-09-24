@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://blueveil.local/contracts/v1/alert.schema.json",
+  "title": "Alert",
+  "description": "Canonical JSON form of blueveil.contracts.v1.Alert.",
+  "type": "object",
+  "required": ["id", "detection_ids", "status", "severity", "created_at", "updated_at", "title"],
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "detection_ids": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "status": {"enum": ["ALERT_STATUS_OPEN", "ALERT_STATUS_ACKNOWLEDGED", "ALERT_STATUS_CLOSED"]},
+    "severity": {"enum": ["SEVERITY_INFO", "SEVERITY_LOW", "SEVERITY_MEDIUM", "SEVERITY_HIGH", "SEVERITY_CRITICAL"]},
+    "created_at": {"type": "string", "format": "date-time"},
+    "updated_at": {"type": "string", "format": "date-time"},
+    "title": {"type": "string", "minLength": 1}
+  },
+  "additionalProperties": false
+}
